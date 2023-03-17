@@ -11,7 +11,12 @@ import sys
 # sys.path.append(os.path.join(os.path.dirname(__file__), './praat'))
 print(sys.path)
 import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import parselmouth
 import platform
+
+path=r'C:\Users\user\Desktop\123\pitch_jitter_shimmer\test\ID17.wav'
 
 __all__ = ['PitchJitterShimmer']
 
@@ -67,8 +72,20 @@ def main():
     praat_file = './praat/praat.praat'
     praat_path = './praat'
     pjs = PitchJitterShimmer(praat_file, praat_path)
-    voice_file = './test/001_a1_PCGITA.wav'
+    voice_file = path
     print(pjs.calculate(voice_file, True))
+    sns.set()
+# Plot nice figures using Python's "standard" matplotlib library
+    snd = parselmouth.Sound(path)
+    plt.figure()
+    plt.plot(snd.xs(), snd.values.T)
+    plt.xlim([snd.xmin, snd.xmax])
+    plt.xlabel("time [s]")
+    plt.ylabel("amplitude")
+# plt.plot(peaks, snd.xs()[peaks], "o")
+
+    plt.show() # or plt.savefig("sound.png"), or plt.savefig("sound.pdf")
+
 
 
 if __name__ == '__main__':
